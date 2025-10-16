@@ -1,10 +1,18 @@
-# Step 1: Build React app
+# Step 1: Build React app using pnpm
 FROM node:18 AS build
 WORKDIR /app
+
+# Install pnpm globally
+RUN npm install -g pnpm
+
+# Copy dependency files and install
 COPY package*.json ./
-RUN npm install
+COPY pnpm-lock.yaml ./
+RUN pnpm install
+
+# Copy rest of the app and build
 COPY . .
-RUN npm run build
+RUN pnpm run build
 
 # Step 2: Serve with Nginx
 FROM nginx:alpine
